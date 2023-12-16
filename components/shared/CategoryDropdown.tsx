@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components//ui/input";
 
 import { ICategory } from "@/lib/db/models/category.model";
-import { createCategory, getCategories } from "@/lib/actions/category.action";
+import { createCategory, getCategories } from "@/lib/actions/category.actions";
 
 interface DropdownProps {
   value?: string;
@@ -36,21 +36,20 @@ const CategoryDropdown = ({ value, onChange }: DropdownProps) => {
   const [categoryName, setCategoryName] = useState("");
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      // try {
-      //   const categories = await getCategories();
-      //   setCategories(categories || []);
-      // } catch (err) {
-      //   console.log(err);
-      // }
-    };
-
-    fetchCategories();
+    getCategories().then((categories: ICategory[] | undefined) => {
+      setCategories(categories || []);
+    });
   }, []);
 
   const handleAddCategory = async () => {
     try {
-      await createCategory({ categoryName });
+      const newCategory = await createCategory({ categoryName });
+
+      if (newCategory) {
+        setCategories((current) => {
+          return [...current, newCategory];
+        });
+      }
     } catch (err) {
       console.log(err);
     }

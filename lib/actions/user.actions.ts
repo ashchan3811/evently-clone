@@ -16,7 +16,7 @@ export async function createUser(user: CreateUserParams) {
 
     const newUser = await User.create(user);
 
-    return newUser.toObject();
+    return newUser.toJSON();
   } catch (error) {
     handleError(error);
   }
@@ -30,7 +30,7 @@ export async function getUserById(userId: string) {
 
     if (!user) throw new Error("User not found");
 
-    return user.toObject();
+    return user.toJSON();
   } catch (error) {
     handleError(error);
   }
@@ -46,7 +46,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
 
     if (!updatedUser) throw new Error("User update failed");
 
-    return updatedUser.toObject();
+    return updatedUser.toJSON();
   } catch (error) {
     handleError(error);
   }
@@ -82,7 +82,7 @@ export async function deleteUser(clerkId: string) {
     const deletedUser = await User.findByIdAndDelete(userToDelete._id);
     revalidatePath("/");
 
-    return deletedUser?.value?.toObject();
+    return deletedUser?.value?.toJSON();
   } catch (error) {
     handleError(error);
   }
