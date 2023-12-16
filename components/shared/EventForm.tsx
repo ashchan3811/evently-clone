@@ -110,7 +110,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
 
             <FormField
               control={form.control}
-              name='title'
+              name='imageUrl'
               render={({ field }) => (
                 <FormItem className='w-full'>
                   <FormControl>
