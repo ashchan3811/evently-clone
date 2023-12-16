@@ -259,9 +259,8 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                                 </label>
                                 <Checkbox
                                   id='isFree'
-                                  {...field}
-                                  value={field.value ? 1 : 0}
-                                  onChange={field.onChange}
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
                                   className='mr-2 h-5 w-5 border-2 border-primary-500'
                                 />
                               </div>
