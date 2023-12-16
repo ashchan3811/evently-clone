@@ -4,8 +4,6 @@ import { ICategory } from "./category.model";
 import { IUser } from "./user.model";
 
 export interface IEvent extends Document {
-  _id: string;
-
   title: string;
   description?: string;
   location?: string;

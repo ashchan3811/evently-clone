@@ -1,19 +1,89 @@
 "use server";
 
-import { CreateUserParams } from "@/types";
-import { handleError } from "@/lib/utils";
-import { connectDb } from "@/lib/db";
-import User, { IUser } from "@/lib/db/models/user.model";
-import _ from "lodash";
+import { revalidatePath } from "next/cache";
 
-export const createUser = async (user: CreateUserParams) => {
+import { connectDb } from "@/lib/db";
+import User from "@/lib/db/models/user.model";
+import Order from "@/lib/db/models/order.model";
+import Event from "@/lib/db/models/event.model";
+import { handleError } from "@/lib/utils";
+
+import { CreateUserParams, UpdateUserParams } from "@/types";
+
+export async function createUser(user: CreateUserParams) {
   try {
     await connectDb();
 
     const newUser = await User.create(user);
 
     return newUser.toObject();
-  } catch (err) {
-    handleError(err);
+  } catch (error) {
+    handleError(error);
   }
-};
+}
+
+export async function getUserById(userId: string) {
+  try {
+    await connectDb();
+
+    const user = await User.findById(userId);
+
+    if (!user) throw new Error("User not found");
+
+    return user.toObject();
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function updateUser(clerkId: string, user: UpdateUserParams) {
+  try {
+    await connectDb();
+
+    const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
+      new: true,
+    });
+
+    if (!updatedUser) throw new Error("User update failed");
+
+    return updatedUser.toObject();
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function deleteUser(clerkId: string) {
+  try {
+    await connectDb();
+
+    // Find user to delete
+    const userToDelete = await User.findOne({ clerkId });
+
+    if (!userToDelete) {
+      throw new Error("User not found");
+    }
+
+    // Unlink relationships
+    await Promise.all([
+      // Update the 'events' collection to remove references to the user
+      Event.updateMany(
+        { _id: { $in: userToDelete.events } },
+        { $pull: { organizer: userToDelete._id } }
+      ),
+
+      // Update the 'orders' collection to remove references to the user
+      Order.updateMany(
+        { _id: { $in: userToDelete.orders } },
+        { $unset: { buyer: 1 } }
+      ),
+    ]);
+
+    // Delete user
+    const deletedUser = await User.findByIdAndDelete(userToDelete._id);
+    revalidatePath("/");
+
+    return deletedUser?.value?.toObject();
+  } catch (error) {
+    handleError(error);
+  }
+}
