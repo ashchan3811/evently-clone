@@ -1,4 +1,4 @@
-import { Schema, model, models, Document } from "mongoose";
+import { Schema, model, models, Document, Model } from "mongoose";
 
 export interface IUser extends Document {
   clerkId: string;
@@ -18,6 +18,6 @@ const UserSchema = new Schema({
   photo: { type: String },
 });
 
-const User = models.User || model<IUser>("User", UserSchema);
+const User: Model<IUser> = models.User || model("User", UserSchema);
 
 export default User;

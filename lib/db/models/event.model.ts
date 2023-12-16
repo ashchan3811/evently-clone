@@ -1,4 +1,4 @@
-import { Schema, model, models, Document } from "mongoose";
+import { Schema, model, models, Document, Model } from "mongoose";
 
 import { ICategory } from "./category.model";
 import { IUser } from "./user.model";
@@ -43,6 +43,6 @@ const EventSchema = new Schema({
   organizer: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
-const Event = models.Event || model<IEvent>("Event", EventSchema);
+const Event: Model<IEvent> = models.Event || model("Event", EventSchema);
 
 export default Event;

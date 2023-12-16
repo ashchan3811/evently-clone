@@ -5,6 +5,7 @@ import { clerkClient } from "@clerk/nextjs";
 
 import { createUser } from "@/lib/actions/user.actions";
 import { CreateUserParams } from "@/types";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -79,6 +80,11 @@ export async function POST(req: Request) {
         publicMetadata: {
           userId: newUser._id,
         },
+      });
+
+      return NextResponse.json({
+        message: "ok",
+        user: newUser,
       });
     }
   }

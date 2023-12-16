@@ -12,7 +12,7 @@ export const createUser = async (user: CreateUserParams) => {
 
     const newUser = await User.create(user);
 
-    return _.cloneDeep<IUser>(newUser);
+    return newUser.toObject();
   } catch (err) {
     handleError(err);
   }
