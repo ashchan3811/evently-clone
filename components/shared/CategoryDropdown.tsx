@@ -29,12 +29,14 @@ interface DropdownProps {
   onChange?: () => void;
 }
 
-const Dropdown = ({ value, onChange }: DropdownProps) => {
+const CategoryDropdown = ({ value, onChange }: DropdownProps) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
 
   const [categoryName, setCategoryName] = useState("");
 
-  const handleAddCategory = () => {};
+  const handleAddCategory = async () => {
+    console.log(categoryName);
+  };
 
   return (
     <Select onValueChange={onChange} value={value}>
@@ -75,7 +77,11 @@ const Dropdown = ({ value, onChange }: DropdownProps) => {
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
-                onClick={() => startTransition(handleAddCategory)}
+                onClick={() =>
+                  startTransition(() => {
+                    handleAddCategory();
+                  })
+                }
               >
                 Continue
               </AlertDialogAction>
@@ -87,4 +93,4 @@ const Dropdown = ({ value, onChange }: DropdownProps) => {
   );
 };
 
-export default Dropdown;
+export default CategoryDropdown;

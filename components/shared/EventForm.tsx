@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { EventFormType, eventFormSchema } from "@/lib/forms/event";
 import { eventDefaultValues } from "@/constants";
-import Dropdown from "./Dropdown";
+import CategoryDropdown from "./CategoryDropdown";
 
 interface EventFormProps {
   userId: string;
@@ -74,7 +74,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               render={({ field }) => (
                 <FormItem className='w-full'>
                   <FormControl>
-                    <Dropdown {...field} />
+                    <CategoryDropdown {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
