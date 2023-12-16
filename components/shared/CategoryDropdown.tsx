@@ -1,6 +1,6 @@
 "use client";
 
-import React, { startTransition, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 
 import {
   Select,
@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components//ui/input";
 
 import { ICategory } from "@/lib/db/models/category.model";
+import { createCategory, getCategories } from "@/lib/actions/category.action";
 
 interface DropdownProps {
   value?: string;
@@ -34,8 +35,25 @@ const CategoryDropdown = ({ value, onChange }: DropdownProps) => {
 
   const [categoryName, setCategoryName] = useState("");
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      // try {
+      //   const categories = await getCategories();
+      //   setCategories(categories || []);
+      // } catch (err) {
+      //   console.log(err);
+      // }
+    };
+
+    fetchCategories();
+  }, []);
+
   const handleAddCategory = async () => {
-    console.log(categoryName);
+    try {
+      await createCategory({ categoryName });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
