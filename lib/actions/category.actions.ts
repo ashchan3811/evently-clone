@@ -4,7 +4,7 @@ import { CreateCategoryParams } from "@/types";
 
 import { connectDb } from "@/lib/db";
 import Category from "@/lib/db/models/category.model";
-import { handleError } from "@/lib/utils";
+import { handleError, toJSON } from "@/lib/utils";
 
 export async function createCategory({ categoryName }: CreateCategoryParams) {
   try {
@@ -14,7 +14,7 @@ export async function createCategory({ categoryName }: CreateCategoryParams) {
       name: categoryName,
     });
 
-    return newCategory.toJSON();
+    return toJSON(newCategory);
   } catch (error) {
     handleError(error);
   }
@@ -26,7 +26,7 @@ export async function getCategories() {
 
     const categories = await Category.find();
 
-    return categories.map((category) => category.toJSON());
+    return toJSON(categories);
   } catch (error) {
     handleError(error);
   }

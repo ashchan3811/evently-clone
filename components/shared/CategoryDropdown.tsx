@@ -27,7 +27,7 @@ import { createCategory, getCategories } from "@/lib/actions/category.actions";
 
 interface DropdownProps {
   value?: string;
-  onChange?: () => void;
+  onChange?: (value: string) => void;
 }
 
 const CategoryDropdown = ({ value, onChange }: DropdownProps) => {
@@ -41,18 +41,14 @@ const CategoryDropdown = ({ value, onChange }: DropdownProps) => {
     });
   }, []);
 
-  const handleAddCategory = async () => {
-    try {
-      const newCategory = await createCategory({ categoryName });
-
+  const handleAddCategory = () => {
+    createCategory({ categoryName }).then((newCategory) => {
       if (newCategory) {
         setCategories((current) => {
           return [...current, newCategory];
         });
       }
-    } catch (err) {
-      console.log(err);
-    }
+    });
   };
 
   return (
@@ -66,7 +62,7 @@ const CategoryDropdown = ({ value, onChange }: DropdownProps) => {
             <SelectItem
               key={category._id}
               className='select-item p-regular-14'
-              value={category.id}
+              value={category._id}
             >
               {category.name}
             </SelectItem>
@@ -94,11 +90,7 @@ const CategoryDropdown = ({ value, onChange }: DropdownProps) => {
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
-                onClick={() =>
-                  startTransition(() => {
-                    handleAddCategory();
-                  })
-                }
+                onClick={() => startTransition(handleAddCategory)}
               >
                 Continue
               </AlertDialogAction>

@@ -6,7 +6,7 @@ import { connectDb } from "@/lib/db";
 import User from "@/lib/db/models/user.model";
 import Order from "@/lib/db/models/order.model";
 import Event from "@/lib/db/models/event.model";
-import { handleError } from "@/lib/utils";
+import { handleError, toJSON } from "@/lib/utils";
 
 import { CreateUserParams, UpdateUserParams } from "@/types";
 
@@ -16,7 +16,7 @@ export async function createUser(user: CreateUserParams) {
 
     const newUser = await User.create(user);
 
-    return newUser.toJSON();
+    return toJSON(newUser);
   } catch (error) {
     handleError(error);
   }
@@ -30,7 +30,7 @@ export async function getUserById(userId: string) {
 
     if (!user) throw new Error("User not found");
 
-    return user.toJSON();
+    return toJSON(user);
   } catch (error) {
     handleError(error);
   }
@@ -46,7 +46,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
 
     if (!updatedUser) throw new Error("User update failed");
 
-    return updatedUser.toJSON();
+    return toJSON(updatedUser);
   } catch (error) {
     handleError(error);
   }
@@ -82,7 +82,7 @@ export async function deleteUser(clerkId: string) {
     const deletedUser = await User.findByIdAndDelete(userToDelete._id);
     revalidatePath("/");
 
-    return deletedUser?.value?.toJSON();
+    return deletedUser ? toJSON(deletedUser?.value) : null;
   } catch (error) {
     handleError(error);
   }
