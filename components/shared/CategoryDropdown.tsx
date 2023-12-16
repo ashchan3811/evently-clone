@@ -42,13 +42,15 @@ const CategoryDropdown = ({ value, onChange }: DropdownProps) => {
   }, []);
 
   const handleAddCategory = () => {
-    createCategory({ categoryName }).then((newCategory) => {
-      if (newCategory) {
-        setCategories((current) => {
-          return [...current, newCategory];
-        });
+    createCategory({ categoryName: categoryName.trim() }).then(
+      (newCategory) => {
+        if (newCategory) {
+          setCategories((current) => {
+            return [...current, newCategory];
+          });
+        }
       }
-    });
+    );
   };
 
   return (
