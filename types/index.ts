@@ -1,5 +1,3 @@
-import { ZodObject, ZodType, z } from "zod";
-
 // ====== USER PARAMS
 export type CreateUserParams = {
   clerkId: string;
