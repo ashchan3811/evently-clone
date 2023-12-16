@@ -28,7 +28,7 @@ import { Checkbox } from "../ui/checkbox";
 
 interface EventFormProps {
   userId: string;
-  type: "create" | "update";
+  type: "Create" | "Update";
 }
 
 const EventForm = ({ userId, type }: EventFormProps) => {
@@ -133,7 +133,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               render={({ field }) => (
                 <FormItem className='w-full'>
                   <FormControl>
-                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-gray-50 px-4 py-2'>
+                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2'>
                       <Image
                         src={"/assets/icons/location-grey.svg"}
                         alt='location'
@@ -160,7 +160,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               render={({ field }) => (
                 <FormItem className='w-full'>
                   <FormControl>
-                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-gray-50 px-4 py-2'>
+                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2'>
                       <Image
                         src={"/assets/icons/calendar.svg"}
                         alt='location'
@@ -168,7 +168,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                         height={24}
                         className='filter-grey'
                       />
-                      <p className='ml-3 whitespace-nowrap text-gray-600'>
+                      <p className='ml-3 whitespace-nowrap text-grey-600'>
                         Start Date:
                       </p>
 
@@ -193,7 +193,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               render={({ field }) => (
                 <FormItem className='w-full'>
                   <FormControl>
-                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-gray-50 px-4 py-2'>
+                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2'>
                       <Image
                         src={"/assets/icons/calendar.svg"}
                         alt='location'
@@ -201,7 +201,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                         height={24}
                         className='filter-grey'
                       />
-                      <p className='ml-3 whitespace-nowrap text-gray-600'>
+                      <p className='ml-3 whitespace-nowrap text-grey-600'>
                         End Date:
                       </p>
 
@@ -228,7 +228,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               render={({ field }) => (
                 <FormItem className='w-full'>
                   <FormControl>
-                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-gray-50 px-4 py-2'>
+                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2'>
                       <Image
                         src={"/assets/icons/dollar.svg"}
                         alt='dollar'
@@ -236,9 +236,6 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                         height={24}
                         className='filter-grey'
                       />
-                      <p className='ml-3 whitespace-nowrap text-gray-600'>
-                        Price
-                      </p>
 
                       <Input
                         type='number'
@@ -286,7 +283,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               render={({ field }) => (
                 <FormItem className='w-full'>
                   <FormControl>
-                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-gray-50 px-4 py-2'>
+                    <div className='flex-center h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2'>
                       <Image
                         src={"/assets/icons/link.svg"}
                         alt='link'
@@ -305,7 +302,14 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               )}
             />
           </div>
-          <Button type='submit'>Submit</Button>
+          <Button
+            type='submit'
+            size={"lg"}
+            disabled={form.formState.isSubmitting}
+            className='button col-span-2 w-full'
+          >
+            {form.formState.isSubmitting ? "Submitting..." : `${type} Event`}
+          </Button>
         </form>
       </Form>
     </div>
