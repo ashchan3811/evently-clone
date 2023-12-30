@@ -104,4 +104,10 @@ export const handleError = (error: unknown) => {
   throw new Error(typeof error === "string" ? error : JSON.stringify(error));
 };
 
-export const toJSON = (object: any) => JSON.parse(JSON.stringify(object));
+export const toJSON = <T>(object: T): T => {
+  if (!object) {
+    return object;
+  }
+
+  return JSON.parse(JSON.stringify(object));
+};
