@@ -1,4 +1,4 @@
-import { connectDb } from "../db";
+import { connectToDb } from "../db";
 import Event, { IEvent } from "../db/models/event.model";
 
 import { Schema } from "mongoose";
@@ -6,7 +6,7 @@ import { toJSON } from "../utils";
 
 export async function getEventById(id: string) {
   try {
-    await connectDb();
+    await connectToDb();
     const event = await Event.findOne({
       _id: new Schema.Types.ObjectId(id),
     });

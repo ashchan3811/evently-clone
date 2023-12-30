@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { connectDb } from "@/lib/db";
+import { connectToDb } from "@/lib/db";
 import User from "@/lib/db/models/user.model";
 import Order from "@/lib/db/models/order.model";
 import Event from "@/lib/db/models/event.model";
@@ -12,7 +12,7 @@ import { CreateUserParams, UpdateUserParams } from "@/types";
 
 export async function createUser(user: CreateUserParams) {
   try {
-    await connectDb();
+    await connectToDb();
 
     const newUser = await User.create(user);
 
@@ -24,7 +24,7 @@ export async function createUser(user: CreateUserParams) {
 
 export async function getUserById(userId: string) {
   try {
-    await connectDb();
+    await connectToDb();
 
     const user = await User.findById(userId);
 
@@ -38,7 +38,7 @@ export async function getUserById(userId: string) {
 
 export async function updateUser(clerkId: string, user: UpdateUserParams) {
   try {
-    await connectDb();
+    await connectToDb();
 
     const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
       new: true,
@@ -54,7 +54,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
 
 export async function deleteUser(clerkId: string) {
   try {
-    await connectDb();
+    await connectToDb();
 
     // Find user to delete
     const userToDelete = await User.findOne({ clerkId });
