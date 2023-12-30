@@ -25,12 +25,12 @@ import { Input } from "@/components//ui/input";
 import { ICategory } from "@/lib/db/models/category.model";
 import { createCategory, getCategories } from "@/lib/actions/category.actions";
 
-interface DropdownProps {
+interface CategoryDropdownProps {
   value?: string;
   onChange?: (value: string) => void;
 }
 
-const CategoryDropdown = ({ value, onChange }: DropdownProps) => {
+const CategoryDropdown = ({ value, onChange }: CategoryDropdownProps) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
 
   const [categoryName, setCategoryName] = useState("");
