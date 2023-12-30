@@ -4,6 +4,11 @@ import React from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import Image from "next/image";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useUploadThing } from "@/lib/uploadthing";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,17 +19,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { EventFormType, eventFormSchema } from "@/lib/forms/event";
+import { EventFormType, eventFormSchema } from "@/lib/forms/event.form";
 import { eventDefaultValues } from "@/constants";
-import CategoryDropdown from "./CategoryDropdown";
-import { Textarea } from "../ui/textarea";
-import FileUploader from "./FileUploader";
-import Image from "next/image";
-
-import DatePicker from "react-datepicker";
-
-import "react-datepicker/dist/react-datepicker.css";
-import { Checkbox } from "../ui/checkbox";
+import CategoryDropdown from "@/components/shared/CategoryDropdown";
+import { Textarea } from "@/components/ui//textarea";
+import FileUploader from "@/components/shared/FileUploader";
+import { Checkbox } from "@/components/ui//checkbox";
 
 interface EventFormProps {
   userId: string;
@@ -33,6 +33,7 @@ interface EventFormProps {
 
 const EventForm = ({ userId, type }: EventFormProps) => {
   const [files, setFiles] = React.useState<File[]>([]);
+  const { startUpload } = useUploadThing("imageUploader");
 
   const initialValues = eventDefaultValues;
 
@@ -45,10 +46,14 @@ const EventForm = ({ userId, type }: EventFormProps) => {
   });
 
   // 2. Define a submit handler.
-  const onSubmit = (values: EventFormType) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const onSubmit = async (values: EventFormType) => {
+    const eventData = { ...values };
+
+    let uploadedImageUrl = values.imageUrl;
+
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+    }
   };
 
   return (
