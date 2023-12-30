@@ -5,6 +5,7 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -25,6 +26,7 @@ import CategoryDropdown from "@/components/shared/CategoryDropdown";
 import { Textarea } from "@/components/ui//textarea";
 import FileUploader from "@/components/shared/FileUploader";
 import { Checkbox } from "@/components/ui//checkbox";
+import { createEvent } from "@/lib/actions/event.actions";
 
 interface EventFormProps {
   userId: string;
@@ -32,6 +34,8 @@ interface EventFormProps {
 }
 
 const EventForm = ({ userId, type }: EventFormProps) => {
+  const router = useRouter();
+
   const [files, setFiles] = React.useState<File[]>([]);
   const { startUpload } = useUploadThing("imageUploader");
 
@@ -53,6 +57,36 @@ const EventForm = ({ userId, type }: EventFormProps) => {
 
     if (files.length > 0) {
       const uploadedImages = await startUpload(files);
+
+      if (!uploadedImages) {
+        return;
+      }
+
+      uploadedImageUrl = uploadedImages[0].url;
+    }
+
+    if (type === "Create") {
+      // create event
+
+      try {
+        const newEvent = await createEvent({
+          event: {
+            ...eventData,
+            imageUrl: uploadedImageUrl,
+          },
+          userId,
+          path: "/profile",
+        });
+
+        if (newEvent) {
+          form.reset();
+          router.push(`/events/${newEvent._id}`);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      // update event
     }
   };
 

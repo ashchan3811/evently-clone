@@ -1,8 +1,12 @@
-import { connectToDb } from "../db";
-import Event, { IEvent } from "../db/models/event.model";
+"use server";
 
 import { Schema } from "mongoose";
-import { toJSON } from "../utils";
+
+import { connectToDb } from "@/lib/db";
+import Event, { IEvent } from "@/lib/db/models/event.model";
+import { handleError, toJSON } from "@/lib/utils";
+import { CreateEventParams } from "@/types";
+import User from "../db/models/user.model";
 
 export async function getEventById(id: string) {
   try {
@@ -13,7 +17,32 @@ export async function getEventById(id: string) {
 
     return toJSON(event);
   } catch (error) {
-    console.log(error);
+    handleError(error);
+    return null;
+  }
+}
+
+export async function createEvent({ event, userId, path }: CreateEventParams) {
+  try {
+    await connectToDb();
+
+    const organizer = await User.findOne({
+      clerkId: userId,
+    });
+
+    if (!organizer) {
+      throw new Error("Organizer not found");
+    }
+
+    const newEvent = await Event.create({
+      ...event,
+      category: event.categoryId,
+      organizer: organizer._id,
+    });
+
+    return toJSON(newEvent);
+  } catch (error) {
+    handleError(error);
     return null;
   }
 }
