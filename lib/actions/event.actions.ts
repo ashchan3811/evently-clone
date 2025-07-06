@@ -1,6 +1,6 @@
 "use server";
 
-import { Schema } from "mongoose";
+import { ObjectId } from "bson";
 
 import { connectToDb } from "@/lib/db";
 import Event, { IEvent } from "@/lib/db/models/event.model";
@@ -11,9 +11,18 @@ import User from "../db/models/user.model";
 export async function getEventById(id: string) {
   try {
     await connectToDb();
+
     const event = await Event.findOne({
-      _id: new Schema.Types.ObjectId(id),
-    });
+      _id: new ObjectId(id),
+    })
+      .populate({
+        path: "organizer",
+        select: "firstName lastName",
+      })
+      .populate({
+        path: "category",
+        select: "name",
+      });
 
     return toJSON(event);
   } catch (error) {
